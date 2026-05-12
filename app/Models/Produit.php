@@ -9,7 +9,6 @@ class Produit extends Model
 {
     use HasFactory;
 
-    // Champs autorisés à être remplis en masse
     protected $fillable = [
         'name',
         'slug',
@@ -22,22 +21,17 @@ class Produit extends Model
         'availability',
     ];
 
-    // Conversions automatiques de types
     protected $casts = [
-        // options est stocké en JSON dans la BDD
-        // Laravel le convertit automatiquement en tableau PHP
         'options'      => 'array',
         'is_featured'  => 'boolean',
         'availability' => 'boolean',
     ];
 
-    // Un produit peut être dans plusieurs paniers
     public function paniers()
     {
         return $this->hasMany(Panier::class);
     }
 
-    // Un produit peut être dans plusieurs commandes
     public function commandes()
     {
         return $this->hasMany(Commande::class);
