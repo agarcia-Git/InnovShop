@@ -16,7 +16,7 @@
             <div class="navbar-nav ms-auto">
                 <a class="nav-link" href="{{ route('accueil') }}">Accueil</a>
                 <a class="nav-link" href="{{ route('catalogue') }}">Catalogue</a>
-                <a class="nav-link" href="#">Panier</a>
+                <a class="nav-link" href="{{ route('panier.index') }}">Panier</a>
             </div>
         </div>
     </nav>

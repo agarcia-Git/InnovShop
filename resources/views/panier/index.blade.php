@@ -1,0 +1,62 @@
+@extends('layouts.app')
+
+@section('titre', 'Mon Panier')
+
+@section('contenu')
+
+    <h2 class="mb-4">🛒 Mon Panier</h2>
+
+    {{-- Message de confirmation --}}
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
+    @if(count($lignes) > 0)
+
+        <table class="table table-bordered align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Produit</th>
+                    <th>Prix unitaire</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($lignes as $ligne)
+                    <tr>
+                        <td>
+                            <a href="{{ route('produit.show', $ligne['produit_id']) }}">
+                                {{ $ligne['name'] }}
+                            </a>
+                        </td>
+                        <td>{{ number_format($ligne['price'], 2) }} €</td>
+                        <td>
+                            {{-- Formulaire DELETE pour supprimer cette ligne via son UUID --}}
+                            <form action="{{ route('panier.supprimer', $ligne['uuid']) }}"
+                                  method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    🗑️ Retirer
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+            <tfoot>
+                <tr class="table-success">
+                    <td><strong>Total</strong></td>
+                    <td colspan="2"><strong>{{ number_format($total, 2) }} €</strong></td>
+                </tr>
+            </tfoot>
+        </table>
+
+    @else
+        <div class="alert alert-info">
+            Votre panier est vide. 
+            <a href="{{ route('catalogue') }}">Continuer mes achats</a>
+        </div>
+    @endif
+
+@endsection

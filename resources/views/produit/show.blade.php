@@ -87,18 +87,13 @@
         @endforeach
     </div>
 @endif
-
-            {{-- Bouton ajout au panier (on le branchera quand on fera le panier) --}}
-            <div class="mt-4">
-                <button class="btn btn-primary btn-lg" disabled>
-                    🛒 Ajouter au panier
-                </button>
-                <small class="text-muted d-block mt-2">
-                    Fonctionnalité panier à venir
-                </small>
-            </div>
-
-        </div>
+           {{-- Bouton ajout au panier --}}
+          <div class="mt-4">
+         <form action="{{ route('panier.ajouter', $produit->id) }}" method="POST">
+        @csrf
+        <button type="submit" class="btn btn-primary btn-lg">
+            🛒 Ajouter au panier
+        </button>
+       </form>
     </div>
-
 @endsection
