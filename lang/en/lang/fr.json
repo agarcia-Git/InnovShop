@@ -1,0 +1,22 @@
+{
+    "Log in": "Connexion",
+    "Register": "S'inscrire",
+    "Password": "Mot de passe",
+    "Email": "Adresse email",
+    "Remember me": "Se souvenir de moi",
+    "Forgot your password?": "Mot de passe oublié ?",
+    "Confirm Password": "Confirmer le mot de passe",
+    "Name": "Prénom",
+    "Already registered?": "Déjà inscrit ?",
+    "Confirm": "Confirmer",
+    "Save": "Enregistrer",
+    "Saved.": "Enregistré.",
+    "Update Password": "Modifier le mot de passe",
+    "Current Password": "Mot de passe actuel",
+    "New Password": "Nouveau mot de passe",
+    "Delete Account": "Supprimer le compte",
+    "Profile": "Profil",
+    "Profile Information": "Informations du profil",
+    "Your email address is unverified.": "Votre adresse email n'est pas vérifiée.",
+    "Logout": "Déconnexion"
+}

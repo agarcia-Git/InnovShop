@@ -1,18 +1,13 @@
-@extends('layouts.app')
-
-@section('titre', 'Mon Panier')
-
-@section('contenu')
+<x-app-layout>
+    <x-slot name="title">Mon Panier</x-slot>
 
     <h2 class="mb-4">🛒 Mon Panier</h2>
 
-    {{-- Message de confirmation --}}
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
     @if(count($lignes) > 0)
-
         <table class="table table-bordered align-middle">
             <thead class="table-dark">
                 <tr>
@@ -31,14 +26,10 @@
                         </td>
                         <td>{{ number_format($ligne['price'], 2) }} €</td>
                         <td>
-                            {{-- Formulaire DELETE pour supprimer cette ligne via son UUID --}}
-                            <form action="{{ route('panier.supprimer', $ligne['uuid']) }}"
-                                  method="POST">
+                            <form action="{{ route('panier.supprimer', $ligne['uuid']) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">
-                                    🗑️ Retirer
-                                </button>
+                                <button type="submit" class="btn btn-danger btn-sm">🗑️ Retirer</button>
                             </form>
                         </td>
                     </tr>
@@ -51,12 +42,11 @@
                 </tr>
             </tfoot>
         </table>
-
     @else
         <div class="alert alert-info">
-            Votre panier est vide. 
+            Votre panier est vide.
             <a href="{{ route('catalogue') }}">Continuer mes achats</a>
         </div>
     @endif
 
-@endsection
+</x-app-layout>

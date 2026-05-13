@@ -1,11 +1,7 @@
-@extends('layouts.app')
-
-@section('titre', 'Catalogue')
-
-@section('contenu')
+<x-app-layout>
+    <x-slot name="title">Catalogue</x-slot>
 
     <h2 class="mb-4">📦 Catalogue des produits</h2>
-
     <div class="row">
         @forelse($produits as $produit)
             <div class="col-md-4 mb-4">
@@ -14,13 +10,9 @@
                          class="card-img-top" alt="{{ $produit->name }}">
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">{{ $produit->name }}</h5>
-                        <p class="card-text text-muted small">
-                            {{-- On tronque la description à 80 caractères pour garder les cartes propres --}}
-                            {{ Str::limit($produit->description, 80) }}
-                        </p>
+                        <p class="card-text text-muted small">{{ Str::limit($produit->description, 80) }}</p>
                         <p class="text-success fw-bold mt-auto">{{ number_format($produit->price, 2) }} €</p>
-                        <a href="{{ route('produit.show', $produit->id) }}"
-                           class="btn btn-primary btn-sm">Voir le produit</a>
+                        <a href="{{ route('produit.show', $produit->id) }}" class="btn btn-primary btn-sm">Voir le produit</a>
                     </div>
                 </div>
             </div>
@@ -29,4 +21,4 @@
         @endforelse
     </div>
 
-@endsection
+</x-app-layout>

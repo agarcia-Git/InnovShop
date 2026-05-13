@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InnovShop — @yield('titre', 'Bienvenue')</title>
-    {{-- Bootstrap 5 pour le style, via CDN --}}
+    <title>InnovShop — {{ $title ?? 'Bienvenue' }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -16,14 +15,27 @@
             <div class="navbar-nav ms-auto">
                 <a class="nav-link" href="{{ route('accueil') }}">Accueil</a>
                 <a class="nav-link" href="{{ route('catalogue') }}">Catalogue</a>
-                <a class="nav-link" href="{{ route('panier.index') }}">Panier</a>
+
+                @auth
+                    <a class="nav-link" href="{{ route('panier.index') }}">Panier</a>
+                    <a class="nav-link" href="{{ route('profile.edit') }}">
+                        {{ Auth::user()->first_name }}
+                    </a>
+                    <form method="POST" action="{{ route('logout') }}" class="d-inline">
+                        @csrf
+                        <button type="submit" class="nav-link btn btn-link">Déconnexion</button>
+                    </form>
+                @else
+                    <a class="nav-link" href="{{ route('login') }}">Connexion</a>
+                    <a class="nav-link" href="{{ route('register') }}">Inscription</a>
+                @endauth
             </div>
         </div>
     </nav>
 
-    {{-- Contenu spécifique à chaque page --}}
+    {{-- Contenu injecté via $slot --}}
     <main class="container my-4">
-        @yield('contenu')
+        {{ $slot }}
     </main>
 
     {{-- Footer --}}

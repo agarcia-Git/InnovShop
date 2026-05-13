@@ -12,7 +12,7 @@ class PanierController extends Controller
     // Afficher le panier de l'utilisateur connecté
     public function index()
     {
-        $panier = Panier::where('user_id', 1)->first();
+        $panier = Panier::where('user_id', auth()->id())->first();
         $lignes = $panier ? ($panier->products ?? []) : [];
         $total  = $panier ? $panier->total_price : 0;
 
@@ -26,7 +26,7 @@ class PanierController extends Controller
 
         // Récupérer ou créer le panier de l'utilisateur
         $panier = Panier::firstOrCreate(
-            ['user_id' => 1],
+            ['user_id' => auth()->id()],
             ['products' => [], 'total_price' => 0]
         );
 
@@ -56,7 +56,7 @@ class PanierController extends Controller
     // Supprimer une ligne du panier par son UUID
     public function supprimer($uuid)
     {
-        $panier = Panier::where('user_id', 1)->first();
+        $panier = Panier::where('user_id', auth()->id())->first();
 
         if (!$panier) {
             return redirect()->route('panier.index');
