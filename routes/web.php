@@ -13,7 +13,7 @@ Route::get('/', [ProduitController::class, 'index'])->name('accueil');
 Route::get('/catalogue', [ProduitController::class, 'catalogue'])->name('catalogue');
 
 // Détail d'un produit
-Route::get('/produit/{id}', [ProduitController::class, 'show'])->name('produit.show');
+Route::get('/produit/{produit}', [ProduitController::class, 'show'])->name('produit.show');
 
 // ── Routes protégées (utilisateur connecté uniquement) ────────
 Route::middleware('auth')->group(function () {

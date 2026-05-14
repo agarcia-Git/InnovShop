@@ -25,10 +25,10 @@ class ProduitController extends Controller
     }
 
     // Page détail d'un produit
-    public function show($id)
+    public function show(Produit $produit)
     {
         // findOrFail déclenche automatiquement une 404 si le produit n'existe pas
-        $produit = Produit::findOrFail($id);
+        
 
         return view('produit.show', compact('produit'));
     }

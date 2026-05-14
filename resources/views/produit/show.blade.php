@@ -10,10 +10,12 @@
     </nav>
 
     <div class="row">
+
         <div class="col-md-5">
             <img src="{{ $produit->image ?? 'https://placehold.co/500x400' }}"
                  class="img-fluid rounded shadow" alt="{{ $produit->name }}">
         </div>
+
         <div class="col-md-7">
             <h1 class="mb-3">{{ $produit->name }}</h1>
             <p class="fs-3 text-success fw-bold">{{ number_format($produit->price, 2) }} €</p>
@@ -36,31 +38,42 @@
                 <div class="d-flex flex-wrap gap-2">
                     @php
                         $couleurs = [
-                            'bleu' => '#2563eb', 'noir' => '#1a1a1a', 'blanc' => '#f8f9fa',
-                            'rouge' => '#dc2626', 'vert' => '#16a34a', 'jaune' => '#eab308',
-                            'gris' => '#6b7280', 'rose' => '#ec4899', 'orange' => '#ea580c',
+                            'bleu'   => '#2563eb', 'noir'   => '#1a1a1a', 'blanc'  => '#f8f9fa',
+                            'rouge'  => '#dc2626', 'vert'   => '#16a34a', 'jaune'  => '#eab308',
+                            'gris'   => '#6b7280', 'rose'   => '#ec4899', 'orange' => '#ea580c',
                             'violet' => '#7c3aed',
                         ];
                     @endphp
+
                     @foreach(\Illuminate\Support\Arr::flatten($produit->options) as $option)
-                        @php $couleurCss = $couleurs[strtolower($option)] ?? null; @endphp
-                        @if($couleurCss)
-                            <span class="badge fs-6 border"
-                                  style="background-color: {{ $couleurCss }}; color: {{ in_array(strtolower($option), ['blanc', 'jaune']) ? '#333' : '#fff' }}; border-color: #ccc !important;">
-                                {{ $option }}
-                            </span>
-                        @else
-                            <span class="badge bg-secondary fs-6">{{ $option }}</span>
-                        @endif
+                        @php $couleurCss = $couleurs[strtolower($option)] ?? '#6b7280'; @endphp
+                        <span class="option-badge badge fs-6 border"
+                              data-option="{{ $option }}"
+                              style="
+                                  background-color: {{ $couleurCss }};
+                                  color: {{ in_array(strtolower($option), ['blanc', 'jaune']) ? '#333' : '#fff' }};
+                                  cursor: pointer;
+                                  transition: transform 0.15s, box-shadow 0.15s;
+                              ">
+                            {{ $option }}
+                        </span>
                     @endforeach
                 </div>
+
+                <p class="text-muted small mt-2" id="option-message">
+                    ⬆️ Sélectionnez une option pour continuer
+                </p>
             @endif
 
             <div class="mt-4">
                 @auth
                     <form action="{{ route('panier.ajouter', $produit->id) }}" method="POST">
                         @csrf
-                        <button type="submit" class="btn btn-primary btn-lg">🛒 Ajouter au panier</button>
+                        <input type="hidden" name="option" id="option-selectionnee" value="">
+                        <button type="submit" class="btn btn-primary btn-lg" id="btn-panier"
+                                {{ $produit->options && count($produit->options) > 0 ? 'disabled' : '' }}>
+                            🛒 Ajouter au panier
+                        </button>
                     </form>
                 @else
                     <a href="{{ route('login') }}" class="btn btn-outline-primary btn-lg">
@@ -68,7 +81,38 @@
                     </a>
                 @endauth
             </div>
+
         </div>
     </div>
+
+    {{-- Le script est placé ici, à l'intérieur du composant,
+         pour être sûr que les badges existent déjà dans le DOM --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const badges = document.querySelectorAll('.option-badge');
+            const input  = document.getElementById('option-selectionnee');
+            const btn    = document.getElementById('btn-panier');
+            const msg    = document.getElementById('option-message');
+
+            badges.forEach(function(badge) {
+                badge.addEventListener('click', function () {
+                    // Réinitialiser tous les badges
+                    badges.forEach(function(b) {
+                        b.style.transform = 'scale(1)';
+                        b.style.boxShadow = 'none';
+                    });
+
+                    // Mettre en évidence le badge sélectionné
+                    this.style.transform = 'scale(1.15)';
+                    this.style.boxShadow = '0 0 0 3px #000';
+
+                    // Stocker l'option et activer le bouton
+                    input.value  = this.dataset.option;
+                    btn.disabled = false;
+                    msg.textContent = '✅ Option sélectionnée : ' + this.dataset.option;
+                });
+            });
+        });
+    </script>
 
 </x-app-layout>

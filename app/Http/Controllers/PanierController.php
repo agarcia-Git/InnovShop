@@ -20,7 +20,7 @@ class PanierController extends Controller
     }
 
     // Ajouter un produit au panier
-    public function ajouter($produitId)
+    public function ajouter(Request $request, $produitId)
     {
         $produit = Produit::findOrFail($produitId);
 
@@ -34,11 +34,13 @@ class PanierController extends Controller
         $lignes = $panier->products ?? [];
 
         // Chaque ajout crée une nouvelle ligne avec un UUID unique
+        // On récupère aussi l'option sélectionnée depuis le formulaire
         $lignes[] = [
-            'uuid'      => (string) Str::uuid(),
-            'produit_id'=> $produit->id,
-            'name'      => $produit->name,
-            'price'     => $produit->price,
+            'uuid'       => (string) Str::uuid(),
+            'produit_id' => $produit->id,
+            'name'       => $produit->name,
+            'price'      => $produit->price,
+            'option'     => $request->input('option', null),
         ];
 
         // Recalculer le total

@@ -8,10 +8,12 @@
     @endif
 
     @if(count($lignes) > 0)
+
         <table class="table table-bordered align-middle">
             <thead class="table-dark">
                 <tr>
                     <th>Produit</th>
+                    <th>Option</th>
                     <th>Prix unitaire</th>
                     <th>Action</th>
                 </tr>
@@ -23,6 +25,10 @@
                             <a href="{{ route('produit.show', $ligne['produit_id']) }}">
                                 {{ $ligne['name'] }}
                             </a>
+                        </td>
+                        <td>
+                            {{-- On affiche l'option si elle existe, sinon un tiret --}}
+                            {{ $ligne['option'] ?? '—' }}
                         </td>
                         <td>{{ number_format($ligne['price'], 2) }} €</td>
                         <td>
@@ -38,10 +44,11 @@
             <tfoot>
                 <tr class="table-success">
                     <td><strong>Total</strong></td>
-                    <td colspan="2"><strong>{{ number_format($total, 2) }} €</strong></td>
+                    <td colspan="3"><strong>{{ number_format($total, 2) }} €</strong></td>
                 </tr>
             </tfoot>
         </table>
+
     @else
         <div class="alert alert-info">
             Votre panier est vide.
