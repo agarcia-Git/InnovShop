@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Commande;
 use App\Models\Panier;
 use App\Http\Requests\CommandeRequest;
+use App\Jobs\EnvoyerEmailCommande;
 
 class CommandeController extends Controller
 {
@@ -52,6 +53,8 @@ class CommandeController extends Controller
         $panier->total_price = 0;
         $panier->save();
 
+    // Déclencher le Job d'envoi d'email en arrière-plan
+        EnvoyerEmailCommande::dispatch($commande);
         return redirect()->route('commande.confirmation', $commande->id);
     }
 
