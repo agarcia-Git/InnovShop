@@ -49,6 +49,12 @@
             </tfoot>
         </table>
 
+        <div class="d-flex justify-content-end mt-3">
+      <a href="{{ route('commande.index') }}" class="btn btn-success btn-lg">
+        ✅ Passer la commande
+    </a>
+</div>
+
     @else
         <div class="alert alert-info">
             Votre panier est vide.
