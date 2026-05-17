@@ -5,6 +5,8 @@ use App\Http\Controllers\ProduitController;
 use App\Http\Controllers\PanierController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CommandeController;
+use App\Http\Controllers\EspaceClientController;
+
 
 // ── Routes publiques ──────────────────────────────────────────
 // Page d'accueil
@@ -28,6 +30,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/commande', [CommandeController::class, 'index'])->name('commande.index');
     Route::post('/commande', [CommandeController::class, 'store'])->name('commande.store');
     Route::get('/commande/confirmation/{id}', [CommandeController::class, 'confirmation'])->name('commande.confirmation');
+
+    // Espace client
+    Route::get('/mon-compte', [EspaceClientController::class, 'index'])->name('client.index');
+    Route::get('/mon-compte/commande/{id}', [EspaceClientController::class, 'show'])->name('client.commande');
 
     // Profil utilisateur (généré par Breeze)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

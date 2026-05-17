@@ -22,6 +22,7 @@
                     <a class="nav-link" href="{{ route('profile.edit') }}">
                         {{ Auth::user()->first_name }}
                     </a>
+                    <a class="nav-link" href="{{ route('client.index') }}">Mon compte</a>
                     <form method="POST" action="{{ route('logout') }}" class="d-inline">
                         @csrf
                         <button type="submit" class="nav-link btn btn-link">Déconnexion</button>
