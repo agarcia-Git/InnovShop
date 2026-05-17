@@ -9,25 +9,39 @@ class EspaceClientController extends Controller
 {
     // Page principale de l'espace client
     public function index()
-    {
-        // Récupérer toutes les commandes de l'utilisateur connecté
-        // triées de la plus récente à la plus ancienne
-        $commandes = Commande::where('user_id', auth()->id())
-                             ->orderBy('created_at', 'desc')
-                             ->get();
+{
+    $commandes = Commande::where('user_id', auth()->id())
+                         ->orderBy('created_at', 'desc')
+                         ->get();
 
-        // Calculer le total dépensé par le client
-        $totalDepense = $commandes->sum('total_price');
+    $totalDepense    = $commandes->sum('total_price');
+    $nombreCommandes = $commandes->count();
 
-        // Nombre de commandes passées
-        $nombreCommandes = $commandes->count();
+    // Dépenses du mois en cours
+    $depensesMoisActuel = Commande::where('user_id', auth()->id())
+        ->whereMonth('created_at', now()->month)
+        ->whereYear('created_at', now()->year)
+        ->sum('total_price');
 
-        return view('espace-client.index', compact(
-            'commandes',
-            'totalDepense',
-            'nombreCommandes'
-        ));
-    }
+    // Dépenses des 3 derniers mois
+    $depensesTrimestre = Commande::where('user_id', auth()->id())
+        ->where('created_at', '>=', now()->subMonths(3))
+        ->sum('total_price');
+
+    // Objectif mensuel fixé à 500€ par défaut
+    $objectifMensuel  = 500;
+    $pourcentageBudget = min(100, ($depensesMoisActuel / $objectifMensuel) * 100);
+
+    return view('espace-client.index', compact(
+        'commandes',
+        'totalDepense',
+        'nombreCommandes',
+        'depensesMoisActuel',
+        'depensesTrimestre',
+        'objectifMensuel',
+        'pourcentageBudget'
+    ));
+}
 
     // Détail d'une commande
     public function show($id)
