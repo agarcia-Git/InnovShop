@@ -41,15 +41,17 @@ class User extends Authenticatable
         return $this->hasMany(Commande::class);
     }
 
+    // Vérifie si l'utilisateur est administrateur
+    public function isAdmin(): bool
+    {
+    return $this->role === 'admin';
+    }
+
     // Un utilisateur a un seul panier
     public function panier()
     {
         return $this->hasOne(Panier::class);
     }
 
-    // Vérifie si l'utilisateur est admin
-    public function isAdmin(): bool
-    {
-        return $this->role === 'admin';
-    }
+
 }

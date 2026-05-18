@@ -8,6 +8,7 @@ use App\Http\Controllers\CommandeController;
 use App\Http\Controllers\EspaceClientController;
 
 
+
 // ── Routes publiques ──────────────────────────────────────────
 // Page d'accueil
 Route::get('/', [ProduitController::class, 'index'])->name('accueil');
@@ -48,3 +49,24 @@ Route::middleware('auth')->group(function () {
 
 // ── Routes d'authentification Breeze ─────────────────────────
 require __DIR__.'/auth.php';
+
+// Groupe de routes protégées par le middleware admin
+Route::prefix('admin')
+    ->middleware(['auth', 'admin'])
+    ->name('admin.')
+    ->group(function () {
+
+        // Tableau de bord
+        Route::get('/', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
+
+        // Gestion des produits
+        Route::resource('produits', \App\Http\Controllers\Admin\ProduitController::class);
+
+        // Gestion des commandes
+        Route::resource('commandes', \App\Http\Controllers\Admin\CommandeController::class)
+            ->only(['index', 'show', 'update']);
+
+        // Gestion des clients
+        Route::resource('clients', \App\Http\Controllers\Admin\ClientController::class)
+            ->only(['index', 'show']);
+    });
