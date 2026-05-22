@@ -11,6 +11,8 @@ class CommandeController extends Controller
     // Liste toutes les commandes, les plus récentes en premier
     public function index()
     {
+        $this->authorize('viewAny', Commande::class);
+
         $commandes = Commande::with('user')
                              ->orderBy('created_at', 'desc')
                              ->paginate(15);
@@ -21,6 +23,8 @@ class CommandeController extends Controller
     // Affiche le détail d'une commande
     public function show(Commande $commande)
     {
+        $this->authorize('view', $commande);
+
         $commande->load('user');
         return view('admin.commandes.show', compact('commande'));
     }
@@ -28,8 +32,9 @@ class CommandeController extends Controller
     // Met à jour le statut d'une commande
     public function update(Request $request, Commande $commande)
     {
+        $this->authorize('update', $commande);
+
         $request->validate([
-            // On valide que la valeur envoyée est bien l'une des valeurs de l'ENUM
             'status' => 'required|in:pending,confirmed,shipped,delivered,cancelled',
         ]);
 

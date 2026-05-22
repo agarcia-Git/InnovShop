@@ -18,27 +18,29 @@ class ProduitController extends Controller
     // Affiche le formulaire de création
     public function create()
     {
+        $this->authorize('create', Produit::class);
         return view('admin.produits.create');
     }
 
     // Enregistre un nouveau produit
     public function store(Request $request)
     {
-      $validated = $request->validate([
-       'name'           => 'required|string|max:255',
-       'description'    => 'nullable|string',
-       'specifications' => 'nullable|string',
-       'price'          => 'required|numeric|min:0',
-       'availability'   => 'boolean',
-       'is_featured'    => 'boolean',
-       'image'          => 'nullable|image|max:2048',
-]);
-    // Les checkboxes non cochées ne sont pas envoyées par le navigateur,
-    // il faut donc forcer leur valeur à false si absentes de la requête
-      $validated['availability'] = $request->boolean('availability');
-      $validated['is_featured']  = $request->boolean('is_featured');
+        $this->authorize('create', Produit::class);
 
-      
+        $validated = $request->validate([
+            'name'           => 'required|string|max:255',
+            'description'    => 'nullable|string',
+            'specifications' => 'nullable|string',
+            'price'          => 'required|numeric|min:0',
+            'availability'   => 'boolean',
+            'is_featured'    => 'boolean',
+            'image'          => 'nullable|image|max:2048',
+        ]);
+
+        // Les checkboxes non cochées ne sont pas envoyées par le navigateur
+        $validated['availability'] = $request->boolean('availability');
+        $validated['is_featured']  = $request->boolean('is_featured');
+
         // Gestion de l'upload d'image
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('produits', 'public');
@@ -53,26 +55,28 @@ class ProduitController extends Controller
     // Affiche le formulaire d'édition
     public function edit(Produit $produit)
     {
+        $this->authorize('update', $produit);
         return view('admin.produits.edit', compact('produit'));
     }
 
     // Met à jour un produit existant
     public function update(Request $request, Produit $produit)
     {
-      $validated = $request->validate([
-       'name'           => 'required|string|max:255',
-       'description'    => 'nullable|string',
-       'specifications' => 'nullable|string',
-       'price'          => 'required|numeric|min:0',
-       'availability'   => 'boolean',
-       'is_featured'    => 'boolean',
-       'image'          => 'nullable|image|max:2048',
-]);
+        $this->authorize('update', $produit);
 
-   // Les checkboxes non cochées ne sont pas envoyées par le navigateur,
-   // il faut donc forcer leur valeur à false si absentes de la requête
-     $validated['availability'] = $request->boolean('availability');
-     $validated['is_featured']  = $request->boolean('is_featured');
+        $validated = $request->validate([
+            'name'           => 'required|string|max:255',
+            'description'    => 'nullable|string',
+            'specifications' => 'nullable|string',
+            'price'          => 'required|numeric|min:0',
+            'availability'   => 'boolean',
+            'is_featured'    => 'boolean',
+            'image'          => 'nullable|image|max:2048',
+        ]);
+
+        // Les checkboxes non cochées ne sont pas envoyées par le navigateur
+        $validated['availability'] = $request->boolean('availability');
+        $validated['is_featured']  = $request->boolean('is_featured');
 
         // On remplace l'image seulement si une nouvelle est uploadée
         if ($request->hasFile('image')) {
@@ -88,6 +92,7 @@ class ProduitController extends Controller
     // Supprime un produit
     public function destroy(Produit $produit)
     {
+        $this->authorize('delete', $produit);
         $produit->delete();
 
         return redirect()->route('admin.produits.index')
