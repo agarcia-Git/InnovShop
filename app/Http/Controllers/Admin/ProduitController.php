@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Produit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ProduitController extends Controller
 {
@@ -46,7 +47,9 @@ class ProduitController extends Controller
             $validated['image'] = $request->file('image')->store('produits', 'public');
         }
 
-        Produit::create($validated);
+        Produit::create(array_merge($validated, [
+            'slug' => Str::slug($validated['name']),
+        ]));
 
         return redirect()->route('admin.produits.index')
             ->with('success', 'Produit créé avec succès.');
