@@ -6,8 +6,8 @@
         @forelse($derniersProduits as $produit)
             <div class="col-md-4 mb-4">
                 <div class="card h-100 shadow-sm">
-                    <img src="{{ $produit->image ?? 'https://placehold.co/300x200' }}"
-                         class="card-img-top" alt="{{ $produit->name }}">
+                    <img src="{{ $produit->image ? asset('storage/' . $produit->image) : 'https://placehold.co/300x200' }}"
+                       class="card-img-top" alt="{{ $produit->name }}">
                     <div class="card-body">
                         <h5 class="card-title">{{ $produit->name }}</h5>
                         <p class="text-success fw-bold">{{ number_format($produit->price, 2) }} €</p>
@@ -27,8 +27,8 @@
         @forelse($produitsUne as $produit)
             <div class="col-md-4 mb-4">
                 <div class="card h-100 shadow-sm border-warning">
-                    <img src="{{ $produit->image ?? 'https://placehold.co/300x200' }}"
-                         class="card-img-top" alt="{{ $produit->name }}">
+                    <img src="{{ $produit->image ? asset('storage/' . $produit->image) : 'https://placehold.co/300x200' }}"
+                     class="card-img-top" alt="{{ $produit->name }}">
                     <div class="card-body">
                         <h5 class="card-title">{{ $produit->name }}</h5>
                         <p class="text-success fw-bold">{{ number_format($produit->price, 2) }} €</p>
