@@ -12,7 +12,7 @@
     <div class="row">
 
         <div class="col-md-5">
-            <img src="{{ $produit->image ?? 'https://placehold.co/500x400' }}"
+            <img src="{{ $produit->image ? asset('storage/' . $produit->image) : 'https://placehold.co/300x200' }}"
                  class="img-fluid rounded shadow" alt="{{ $produit->name }}">
         </div>
 
