@@ -24,11 +24,12 @@
                 box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             }
             .auth-brand {
-                font-size: 1.8rem;
-                font-weight: 700;
-                color: #1a1a2e;
-                letter-spacing: -0.5px;
-            }
+               font-size: 1.8rem;
+               font-weight: 700;
+               color: #ffffff;
+               letter-spacing: -0.5px;
+           }
+            
             .auth-brand span {
                 color: #e07b39;
             }
