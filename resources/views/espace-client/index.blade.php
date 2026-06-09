@@ -3,6 +3,14 @@
 
     <h2 class="mb-4">👤 Mon espace client</h2>
 
+    {{-- Messages flash --}}
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+    @if(session('error'))
+        <div class="alert alert-danger">{{ session('error') }}</div>
+    @endif
+
     {{-- Statistiques --}}
     <div class="row mb-5">
         <div class="col-md-4">
@@ -66,3 +74,74 @@
                         </td>
                         <td>{{ number_format($commande->total_price, 2) }} €</td>
                         <td>
+                            <a href="{{ route('client.commande', $commande->id) }}"
+                               class="btn btn-outline-primary btn-sm">
+                                Voir le détail
+                            </a>
+                            @if($commande->status === 'pending')
+                                <form action="{{ route('espace-client.annuler', $commande) }}"
+                                      method="POST" class="d-inline"
+                                      onsubmit="return confirm('Êtes-vous sûr de vouloir annuler cette commande ?')">
+                                    @csrf
+                                    <button type="submit" class="btn btn-outline-danger btn-sm ms-1">
+                                        Annuler
+                                    </button>
+                                </form>
+                            @endif
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    @else
+        <div class="alert alert-info">
+            Vous n'avez pas encore passé de commande.
+            <a href="{{ route('catalogue') }}">Découvrir nos produits</a>
+        </div>
+    @endif
+
+    {{-- Section dépenses --}}
+    <h4 class="mb-3 mt-5">💰 Suivi de mes dépenses</h4>
+    <div class="row mb-4">
+        <div class="col-md-6 mb-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="text-muted">Dépenses ce mois-ci</h6>
+                    <h4 class="fw-bold text-danger">{{ number_format($depensesMoisActuel, 2) }} €</h4>
+                    <p class="text-muted small mb-1">Objectif mensuel : {{ number_format($objectifMensuel, 2) }} €</p>
+                    <div class="progress" style="height: 12px;">
+                        <div class="progress-bar {{ $pourcentageBudget >= 100 ? 'bg-danger' : ($pourcentageBudget >= 75 ? 'bg-warning' : 'bg-success') }}"
+                             role="progressbar"
+                             style="width: {{ $pourcentageBudget }}%">
+                        </div>
+                    </div>
+                    <p class="text-muted small mt-1">
+                        {{ number_format($pourcentageBudget, 0) }}% de votre budget mensuel utilisé
+                        @if($pourcentageBudget >= 100)
+                            <span class="text-danger fw-bold">— Budget dépassé !</span>
+                        @elseif($pourcentageBudget >= 75)
+                            <span class="text-warning fw-bold">— Attention, budget presque atteint</span>
+                        @else
+                            <span class="text-success">— Budget maîtrisé ✅</span>
+                        @endif
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="text-muted">Dépenses ces 3 derniers mois</h6>
+                    <h4 class="fw-bold text-warning">{{ number_format($depensesTrimestre, 2) }} €</h4>
+                    <p class="text-muted small">
+                        Soit une moyenne de <strong>{{ number_format($depensesTrimestre / 3, 2) }} € / mois</strong>
+                    </p>
+                    <h6 class="text-muted mt-3">Total dépensé depuis le début</h6>
+                    <h4 class="fw-bold text-primary">{{ number_format($totalDepense, 2) }} €</h4>
+                    <p class="text-muted small">Sur {{ $nombreCommandes }} commande(s) passée(s).</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</x-app-layout>
