@@ -52,4 +52,24 @@ class EspaceClientController extends Controller
 
         return view('espace-client.show', compact('commande'));
     }
+
+    // Annuler une commande
+public function annuler(Commande $commande)
+{
+    // Vérifier que la commande appartient bien à l'utilisateur connecté
+    if ($commande->user_id !== auth()->id()) {
+        abort(403);
+    }
+
+    // On ne peut annuler que les commandes en attente
+    if ($commande->status !== 'pending') {
+        return redirect()->route('espace-client.index')
+                         ->with('error', 'Cette commande ne peut plus être annulée.');
+    }
+
+    $commande->update(['status' => 'cancelled']);
+
+    return redirect()->route('espace-client.index')
+                     ->with('success', 'Votre commande a bien été annulée.');
+}
 }

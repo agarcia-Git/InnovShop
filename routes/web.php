@@ -69,4 +69,8 @@ Route::prefix('admin')
         // Gestion des clients
         Route::resource('clients', \App\Http\Controllers\Admin\ClientController::class)
             ->only(['index', 'show']);
+
+            Route::post('/espace-client/commandes/{commande}/annuler', 
+           [EspaceClientController::class, 'annuler'])
+           ->name('espace-client.annuler');
     });
