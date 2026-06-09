@@ -28,8 +28,6 @@ Route::middleware('auth')->group(function () {
     // Espace client
     Route::get('/mon-compte', [EspaceClientController::class, 'index'])->name('client.index');
     Route::get('/mon-compte/commande/{id}', [EspaceClientController::class, 'show'])->name('client.commande');
-
-    // ← Route d'annulation de commande (bien dans le groupe auth, pas admin)
     Route::post('/mon-compte/commandes/{commande}/annuler', [EspaceClientController::class, 'annuler'])->name('espace-client.annuler');
 
     // Profil utilisateur

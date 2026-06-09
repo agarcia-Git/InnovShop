@@ -25,7 +25,7 @@ class EspaceClientController extends Controller
             ->where('created_at', '>=', now()->subMonths(3))
             ->sum('total_price');
 
-        $objectifMensuel  = 500;
+        $objectifMensuel   = 500;
         $pourcentageBudget = min(100, ($depensesMoisActuel / $objectifMensuel) * 100);
 
         return view('espace-client.index', compact(
@@ -55,13 +55,13 @@ class EspaceClientController extends Controller
         }
 
         if ($commande->status !== 'pending') {
-            return redirect()->route('espace-client.index')
+            return redirect()->route('client.index')
                              ->with('error', 'Cette commande ne peut plus être annulée.');
         }
 
         $commande->update(['status' => 'cancelled']);
 
-        return redirect()->route('espace-client.index')
+        return redirect()->route('client.index')
                          ->with('success', 'Votre commande a bien été annulée.');
     }
 }

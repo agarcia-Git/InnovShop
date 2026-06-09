@@ -3,7 +3,6 @@
 
     <h2 class="mb-4">👤 Mon espace client</h2>
 
-    {{-- Messages flash --}}
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
@@ -11,7 +10,6 @@
         <div class="alert alert-danger">{{ session('error') }}</div>
     @endif
 
-    {{-- Statistiques --}}
     <div class="row mb-5">
         <div class="col-md-4">
             <div class="card text-center shadow-sm border-primary">
@@ -39,7 +37,6 @@
         </div>
     </div>
 
-    {{-- Historique des commandes --}}
     <h4 class="mb-3">📦 Historique des commandes</h4>
 
     @if($commandes->count() > 0)
@@ -100,7 +97,6 @@
         </div>
     @endif
 
-    {{-- Section dépenses --}}
     <h4 class="mb-3 mt-5">💰 Suivi de mes dépenses</h4>
     <div class="row mb-4">
         <div class="col-md-6 mb-3">
